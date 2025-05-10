@@ -1,0 +1,15 @@
+version: "3"
+services:
+  app:
+    image: nginx-app
+    ports:
+      - "3005:3005"
+
+  app2:
+    image: nginx-app
+    ports:
+      - "3006:3005"
+  app3:
+    image: nginx-app
+    ports:
+      - "3007:3005"

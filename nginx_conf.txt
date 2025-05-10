@@ -1,0 +1,35 @@
+#Run nginx -V in the CLI
+#then open the --conf-path and update the file configuration.
+
+worker_processes 1;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    # include file types in the response headers.
+    include mime.types;
+
+    upstream nodejs_cluster{
+        least_conn; #algo - round_robin, least_conn
+
+        server 127.0.0.1:3005;
+        server 127.0.0.1:3006;
+        server 127.0.0.1:3007;
+    }   
+
+    server {
+        listen 8080;
+        server_name localhost;
+
+
+        location / {
+            proxy_pass http://nodejs_cluster;
+
+            # include below items to the request header
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+    }
+}
